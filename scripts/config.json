@@ -1,0 +1,6 @@
+{
+	"data": ".\\data", 
+	"config": ".\\config",
+	"location": "https://forecast.weather.gov/MapClick.php?lat=40.1554&lon=-83.0878#.YZ7lB9nMLBE",
+	"db_file": "weather_data.db"
+}
