@@ -10,13 +10,14 @@ import re
 import json
 import sqlite3
 import sys,os
+from loguru import logger
 
 # Import config details
 ## => This section ultimately needs to be moved to a configuration file, but I got
 ## ==> of troubleshooting and moved on to developing the feature to output to SQL Lite. 
 ## ==> Eventually I need to find a way for this code to leverage the variables from the
 ## ==> config file for scalability / portability. 
-cfile = 'config.json' 
+cfile = '/home/jeremy_fina/staging/001_weather_app/scripts/config.json' 
 with open(cfile, 'r') as config_file:
 	data = json.load(config_file)
 file_URL = json.dumps(data["location"])
@@ -26,8 +27,12 @@ print("Successfully imported read_config.py")
 
 parent_path = os.path.realpath('..')
 ### dev notes -> '/data/' and 'weather_data.db' should be values read from the config file
-full_path = str(parent_path + '/data/' + 'weather_data.db')
-print("DB Location: ", full_path)
+full_path = str(db_file)
+print("DB Location: ", db_file)
+
+# Establish where the log file is going
+logger.add('/home/jeremy_fina/staging/001_weather_app/data/lightning_run_log.log')
+
 
 # Establish where I'm picking data up from
 page = requests.get('https://forecast.weather.gov/MapClick.php?lat=40.1554&lon=-83.0878#.YZ7lB9nMLBE')
@@ -96,7 +101,7 @@ low_temp = temp
 # ==> db file established in the 'data' folder. 
 
 ##sql_db = '.\data\weather_data.db'
-db = sqlite3.connect(full_path)
+db = sqlite3.connect('/home/jeremy_fina/staging/001_weather_app/data/weather_data.db')
 cursor = db.cursor()
 db_name = 'weather_data'
 
@@ -137,3 +142,4 @@ print("Visibility: ",visibility)
 print("Wind Chill: ",wind_chill)
 print("Last Updated: ",last_updated)
 print("Config File - Read from URL: ", file_URL)
+logger.info("Run complete.")
